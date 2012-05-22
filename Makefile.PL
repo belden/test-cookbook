@@ -24,7 +24,7 @@ WriteMakefile(
 		Devel::LexAlias
 		Test::WWW::Selenium
 		WWW::Selenium
-		Temp::File
+		File::Temp
 		Signals::XSIG
 		Test::Exit
 		Test::Warn
