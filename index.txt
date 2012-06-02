@@ -1,0 +1,35 @@
+Introduction:
+
+  * Hi, I'm Belden Lyman; twitter.com/belden search.cpan.org/~belden github.com/belden
+  * Started with Perl in 2000. Full-time Perl developer for past 10 years.
+  * Previously at AirWave.com for 6.5 years. Member of an XP team: pair programming; TDD.
+    About 33% of the time was spent writing tests for our whole stack, which includes:
+    o  mod_perl2 pages
+    o  daemons speaking various protocols (SNMPs, FTPs, SSH, telnet, HTTPs)
+    o  ORM layer
+    o  RRDTool
+    o  perl and bash scripts
+    o  reporting and cron daemons
+
+    In other words, the usual kind of stuff that Perl developers do.
+
+  * I've been at Shutterstock.com since mid-November 2011, so about 7 months. I'm a member of
+    a Scrum team: mostly singleton programming, some pairing; people like me are starting to
+    advocate more for TDD practices.
+
+Today I'll show you a few of the things in my testing toolbox. But first I'd like to lay out
+some of the initial problems with writing good tests, and sort of work up a set of testing
+axioms.
+
+And since I like Perl Cookbook so much, and learned so much from it, I'm structuring this talk
+similar to that book.
+
+-----
+
+Chapter 1: Basic testing problems
+
+  1.1: Testing that two Perl data structures are the same.
+
+  1.2: Testing that two pieces of XML or HTML are the same.
+
+  1.3: Testing that two coderefs are the same.

@@ -1,0 +1,8 @@
+Recipe 1.2: Testing that two pieces of XML or HTML are the same.
+
+Problem: You want to compare that two pieces of XML, or two pieces of HTML, are equivalent.
+
+Solution: Convert your got and expected documents into data structures, then compare them
+  using Recipe 1.1.
+
+
