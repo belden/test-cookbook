@@ -9,26 +9,27 @@ WriteMakefile(
 	ABSTRACT            => 'Makefile.PL for my Test::Cookbook talk at YAPC::NA 2012',
 	LICENSE => 'perl',
 	PREREQ_PM => +{ map { ($_ => 0) } qw(
-		Test::More
-		IO::Capture
-		Test::MockObject
-		Test::Output
 		Capture::Tiny
-		Test::Resub
-		Test::Wiretap
+		Devel::LexAlias
+		File::Temp
+		IO::Capture
+		Memoize
+		Signals::XSIG
 		Test::Deep
+		Test::Exception
+		Test::Exit
+		Test::MockObject
+		Test::More
+		Test::Output
+		Test::Resub
+		Test::Warn
+		Test::Wiretap
+		Test::WWW::Selenium
+		Test::XML
+		WWW::Selenium
+		XML::Parser
 		XML::Simple
 		XML::Twig
-		XML::Parser
-		Memoize
-		Devel::LexAlias
-		Test::WWW::Selenium
-		WWW::Selenium
-		File::Temp
-		Signals::XSIG
-		Test::Exit
-		Test::Warn
-		Test::Exception
 	)},
 	PL_FILES            => {},
 	dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },

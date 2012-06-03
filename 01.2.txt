@@ -2,7 +2,138 @@ Recipe 1.2: Testing that two pieces of XML or HTML are the same.
 
 Problem: You want to compare that two pieces of XML, or two pieces of HTML, are equivalent.
 
-Solution: Convert your got and expected documents into data structures, then compare them
-  using Recipe 1.1.
+Solution: Test::XML's is_xml() is custom-built for exactly this purpose. It offers sufficient
+insight into its failure mode to be useful for the test-driven developer:
 
+		use Test::XML;
+		use Test::More;
 
+		my $expected = <<XML;
+		<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+		    <SOAP-ENV:Envelope
+		      SOAP-ENV:encodingStyle=\"http://schemas.xmlsoap.org/soap/encoding/\"
+		      xmlns:SOAP-ENC=\"http://schemas.xmlsoap.org/soap/encoding/\"
+		      xmlns:xsi=\"http://www.w3.org/1999/XMLSchema-instance\"
+		      xmlns:SOAP-ENV=\"http://schemas.xmlsoap.org/soap/envelope/\"
+		      xmlns:xsd=\"http://www.w3.org/1999/XMLSchema\">
+		      <SOAP-ENV:Body>
+		        <checkVat xmlns=\"urn:ec.europa.eu:taxud:vies:services:checkVat:types\">
+		          <countryCode>DE</countryCode>
+		          <vatNumber>123</vatNumber>
+		        </checkVat>
+		      </SOAP-ENV:Body>
+		    </SOAP-ENV:Envelope>
+		XML
+
+    my $got = $expected;
+		is_xml( $got, $expected, 'built it good' );
+
+    __END__
+    ok 1 - built it good
+
+Changing $got to force a failure produces a fairly compact representation of the failure:
+
+    use Test::XML;
+    my $expected = ...;
+    (my $got = $expected) =~ s{<vatNumber>123</vatNumber>}{<catNumber>456</catNumber>};
+    is_xml( $got, $expected, 'miaowed it good' );
+
+    __END__
+		# Found 2 differences with expected:
+		#   Child element 'vatNumber' missing from element '/Envelope[1]/Body[1]/checkVat[1]'.
+		#   Rogue element 'catNumber' in element '/Envelope[1]/Body[1]/checkVat[1]'.
+		# in processed XML:
+		#   <?xml version="1.0" encoding="UTF-8"?>
+		#     <SOAP-ENV:Envelope
+		#       SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+		#       xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+		#       xmlns:xsi="http://www.w3.org/1999/XMLSchema-instance"
+		#       xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+		#       xmlns:xsd="http://www.w3.org/1999/XMLSchema">
+		#       <SOAP-ENV:Body>
+		#         <checkVat xmlns="urn:ec.europa.eu:taxud:vies:services:checkVat:types">
+		#           <countryCode>DE</countryCode>
+		#           <catNumber>456</catNumber>
+		#         </checkVat>
+		#       </SOAP-ENV:Body>
+		#     </SOAP-ENV:Envelope>
+
+If you prefer a more data-centric view of failures, you must first convert your XML documents
+to data structures using an XML parser then compare the two data structures using Recipe 1.1.
+
+    sub xml_ok ($$;$) {
+      my ($got, $expected, $message) = @_;
+
+      my $convert_to_data = sub {
+        my ($xml) = @_;
+        return XMLin($got, ForceArray => 1);
+      };
+
+      return deep_ok( $convert_to_data->($got), $convert_to_data->($expected), $message );
+    }
+
+And the output with the vatNumber / catNumber XML from above:
+
+		# --- Got
+		# +++ Expected
+		# @@ -1,22 +1,22 @@
+		#  {
+		#    'SOAP-ENV:Body' => [
+		#      {
+		#        checkVat => [
+		#          {
+		# -          catNumber => [
+		# -            '456'
+		# -          ],
+		#            countryCode => [
+		#              'DE'
+		# +          ],
+		# +          vatNumber => [
+		# +            '123'
+		#            ],
+		#            xmlns => 'urn:ec.europa.eu:taxud:vies:services:checkVat:types'
+		#          }
+		#        ]
+		#      }
+		#    ],
+		#    'SOAP-ENV:encodingStyle' => 'http://schemas.xmlsoap.org/soap/encoding/',
+		#    'xmlns:SOAP-ENC' => 'http://schemas.xmlsoap.org/soap/encoding/',
+		#    'xmlns:SOAP-ENV' => 'http://schemas.xmlsoap.org/soap/envelope/',
+		#    'xmlns:xsd' => 'http://www.w3.org/1999/XMLSchema',
+		#    'xmlns:xsi' => 'http://www.w3.org/1999/XMLSchema-instance'
+		#  }
+
+Dealing with HTML is similarly simple:
+
+		my $html_expected = <<HTML;
+		<html>
+		<head><title>hi mom</title></head>
+		<body><p />hello world</body>
+		</html>
+		HTML
+
+		(my $html_got = $html_expected) =~ s{hello}{goodbye};
+		xml_ok( $html_got, $html_expected );
+
+		__END__
+		# --- Got
+		# +++ Expected
+		# @@ -1,17 +1,17 @@
+		#  {
+		#    body => [
+		#      {
+		# -      content => 'goodbye world',
+		# +      content => 'hello world',
+		#        p => [
+		#          {}
+		#        ]
+		#      }
+		#    ],
+		#    head => [
+		#      {
+		#        title => [
+		#          'hi mom'
+		#        ]
+		#      }
+		#    ]
+		#  }

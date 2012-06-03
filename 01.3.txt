@@ -1,0 +1,147 @@
+Recipe 1.3: Testing that two code references are the same.
+
+Description: You're having a hard time proving that two code references are the same. This
+can happen when you're testing some data structure that stores code references; when
+you're examining the arguments sent to a subroutine and one of those arguements
+is a code reference; and when you're proving a strange feature of a class's inheritance.
+
+Problem 1: Testing a data structure that stores code references.
+
+    package Dispatcher::Base;
+
+    sub handle_action {
+      my ($class, $action, @args) = @_;
+
+      my %dispatch_table = $class->dispatch_table;
+      my $callback = $dispatch_table{$action};
+      $callback->(@args);
+    }
+
+    # --
+
+    package Dispatched::Subclass;
+    use base qw(Dispatcher::Base);
+
+    sub dispatch_table {
+      my ($class) = @_;
+      return (
+        add => \&do_add,
+        get => \&do_get,
+        delete => \&do_delete,
+      );
+    }
+
+A testing strategy for this code might look like these steps:
+
+  1. Prove that we know which actions are associated with which callbacks in ->dispatch_table.
+  2. Prove that ->handle_action dispatches $action to ->dispatch_table, passing along @args.
+  3. Prove the individual callbacks in ->dispatch_table.
+
+A first approach to test this might look like this:
+
+    use Test::More;
+    use Dispatched::Subclass;
+
+    my %dispatch_table = Dispatched::Subclass->dispatch_table;
+
+    # repeat for every other entry in %dispatch_table
+		is( $dispatch_table{add}, \&Dispatched::Subclass::add, 'add is the right \&add' );
+
+This approach fails as a proof, because the \&do_add stored inside ->dispatch_table() is a
+different reference from the test's \&Dispatched::Subclass::add. Changing how both references
+are created allows for a successful test:
+
+    sub dispatch_table {
+      my ($class) = @_;
+
+      return (
+        add => $class->can('do_add'),
+        # ...
+      );
+    }
+
+    sub coderefs_same($$;$) {
+      my ($got, $expected, $message) = @_;
+      my ($exp_class, $exp_method) = $expected =~ m{^(.*)::(.*?)$};
+      $expected = $exp_class->can($exp_method);
+      return is( $got, $expected, $message );
+    }
+
+This approach still has flaws. Not all Perl developers will be able to use Test::More; for those
+that are using Test::Simple's ok() function, simply changing is() to  ok() in coderefs_same()
+above will cause surprising side effects: when presented with a coderef in either the $got or
+$expected position, Test::Simple::ok() executes the coderef and uses its return value as the
+value to be proven.
+
+    use Test::Simple;
+
+    my $i = 0;
+    sub bump { $i++ }
+
+    ok( \&bump, \&bump, "Perl's references are sane" ); # fails; you're testing ok( 0, 1 ).
+
+Beyond that, changing ->dispatch_table() from having its own reference to \&do_add to using
+->can's return value has potential performance penalties. Inquiring whether a class ->can
+perform a method causes Perl to dump and recreate its method dispatch table for that class,
+which has negative runtime performance.
+
+One could make ->dispatch_table() return a cached response and then continue with the
+coderefs_same() testing strategy above:
+
+    package Dispatched::Subclass;
+
+    {
+      my %dispatch_table;
+
+      sub dispatch_table {
+        my ($class) = @_;
+        if (! scalar keys %dispatch_table) {
+          %dispatch_table = (
+            do_add => $class->can('do_add'),
+            # ...
+          );
+        }
+
+        return %dispatch_table;
+      }
+    }
+
+But probably very few of us would like to work within a system such as this.
+
+My preferred way to test this is to prove the result of hooking the ->dispatch_table() together.
+Going back to our original implementation:
+
+    package Dispatched::Subclass;
+    use base qw(Dispatcher::Base);
+
+    sub dispatch_table {
+      my ($class) = @_;
+      return (
+        add => \&do_add,
+        get => \&do_get,
+        delete => \&do_delete,
+      );
+    }
+
+A more robust testing strategy looks like this:
+
+    use Test::Resub qw(bulk_resub);
+
+    use Dispatched::Subclass;
+
+    # test ->dispatch_table
+    {
+      my %rs = bulk_resub 'Dispatched::Subclass', (
+        add => sub { 'add' },
+        get => sub { 'get' },
+        delete => sub { 'delete' },
+      );
+
+			my %dispatch_table = Dispatched::Subclass->dispatch_table;
+      foreach my $action (keys %dispatch_table) {
+        is( $dispatch_table{$action}->(), $action, "$action plumbed into dispatch_table correctly" );
+      }      
+    }
+
+    # test ->do_add, ->do_get, ->do_delete
+
