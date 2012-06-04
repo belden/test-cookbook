@@ -1,0 +1,40 @@
+1. introduction
+   - who am i
+   - what does "tdd" mean: "development that is driven by tests (a sleigh drawn by horses)" ? Or "taking your code for a spin"
+     * it's probably both; I think we usually interpret TDD to mean the former; but it's useful to think about it in terms
+       of a testdrive.
+     * during a testdrive you try out a car; you compare it to other cars you've driven; you ask yourself if you want to own
+       this car, and how much you're willing to pay for it.
+     * you might even collect information about the car: how quickly does it accelerate; what type of mileage does it get;
+       what are its crash test ratings
+   - good tests, and good testing technology, allow you to gather similar information and answer similar questions
+     * you can build out your test harness to keep timings of test execution times, for example - and have meta tests that
+       fail when timings fall outside a few standard deviations of the norm. This isn't hard to build; you just have to think
+       you want to.
+   - above all, test failures must be meaningful --> there's a lack here
+
+2. a small toolset for tdd
+   - deep_ok
+   - set_ok
+   - xml_ok
+   - system_ok
+   - stdout_of / stderr_of -- doesn't matter how you implement these, but you eventually should
+
+3. some nicer testing technology
+   - I don't like tests in a loop --> hard to maintain testcounts; hard to diagnose failures --> each_ok { ... }
+   - stub objects (they just get an autoloader)
+   - we don't always get to be purely tdd; often as Perl devs we work on legacy code; inspecting how code works
+     and codifying it in a test is a good idea before refactoring --> tracker objects
+   - monkeypatching is a useful technique but it has a high cognitive tax --> resub
+   - other destroyed bits of technology --> File::Temp
+   - when else do you 'local' things to control your test environment?
+
+4. weird testing technology
+   - tied and overloaded objects
+   - replacing things in CORE::GLOBAL::
+   - destroyed classes
+
+5. testing technology I'm not a fan of
+   - Test::MockObject - no offense intended here; I just don't like the interface. It doesn't feel like writing Perl to me.
+     Usually I just implement my own thing using resubs and destroyed classes. Maybe I should stick that up on CPAN.
+
