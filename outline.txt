@@ -16,9 +16,10 @@
 2. a small toolset for tdd
    - deep_ok
    - set_ok
-   - xml_ok
+   - xml_ok                -- once I get beyond 2 regexes against xml/html I start treating it like data to compare
    - system_ok
    - stdout_of / stderr_of -- doesn't matter how you implement these, but you eventually should
+   - memoized_ok
 
 3. some nicer testing technology
    - I don't like tests in a loop --> hard to maintain testcounts; hard to diagnose failures --> each_ok { ... }

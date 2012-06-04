@@ -1,0 +1,6 @@
+"Test Driven Development" is an interesting phrase, right?
+
+I think that when we hear it, we get this image in our heads: like a horse-drawn sleigh; test-driven development. [whinny]
+Like the tests somehow pull the development along behind them.
+
+There's another phrase hidden in there though. It's the idea of going for a test drive. [vrooom]

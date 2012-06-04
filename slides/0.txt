@@ -1,0 +1,17 @@
+Hi, I'm Belden Lyman.
+
+-- git clone git://github.com/belden/test-cookbook.git
+I've put that there in case you have an internet connection and want to run some of the code samples as we talk
+
+Perl for 12 years; full-time Perl developer for 10 years.
+* Mar 2000 to Feb 2005 tools guy at a library software company
+* Feb 2005 to Nov 2011 with the XP Perl team at AirWave.com - TDD
+* Nov 2011 to present with Shutterstock.com - maybe I'm a TDD evangelist here, I don't really know
+
+I'm online and you can read my tweets about werewolves and Perl (that's an exclusive and, I
+don't think I've tweeted about werewolves and perl in the same 140 characters).
+
+twitter.com/belden
+
+Also, I'm super nervous and I have no idea why I signed up to do this talk. But look, if I can be accepted
+to YAPC to ramble a bit, then any of you can be too. Seriously.

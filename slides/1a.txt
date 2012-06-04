@@ -1,0 +1,13 @@
+"Let's go for a spin"
+
+A testdrive is pretty fun, right? You get to try out a new car, and ask yourself all sorts of questions:
+* how does this compare to other cars I've driven
+* do I like the dashboard and cockpit
+* would I want to own this
+* maybe you pop the hood to see if you'd be able to tune up the car (nowadays probably not)
+* you might collect info about the car: how quickly it accelerates; what type of mileage does it get;
+  crash test ratings.
+
+So now you can say hey, I want my tests to help me answer those questions too.
+
+[sweet]
