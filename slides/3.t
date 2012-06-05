@@ -19,5 +19,12 @@ foreach (@expected) {
 	is( fibonacci(), $_ );
 }
 
+fib_reset;
+my @bad;
+foreach (@expected) {
+	push @bad, $_ unless fibonacci() == $_;
+}
+deep_ok( \@bad, [] );
+
 fib_reset();
 each_ok { fibonacci(), $_ } @expected;

@@ -7,21 +7,7 @@ use Test::More;
 use Test::Cookbook;
 use Test::Differences;
 
-use LWP::UserAgent;
-use JSON::XS;
-
-sub url_to_json {
-	my ($url, %params) = @_;
-
-	my $ua = LWP::UserAgent->new;
-	my $response = $ua->get($url, %params);
-
-	if ($response->is_success) {
-		return decode_json($response->content);
-	} else {
-		return {};
-	}
-}
+use WebUtils qw(url_to_json);
 
 my $mock = mock_object->new(
 	is_success => 1,
@@ -30,4 +16,9 @@ my $mock = mock_object->new(
 $mock->install_at('LWP::UserAgent::new');
 
 my $response = url_to_json('http://0:8000/foo/bar');
-eq_or_diff( $response, {hello => 'madison'} );
+deep_ok( $response, {hello => 'world'}, 'successfully decoded json' );
+
+$mock->(is_success => 0);
+ok( $mock->is_success == 0, 'set failure' );
+$response = url_to_json('http://frob.ni.tz');
+deep_ok( $response, {}, 'unsuccessful response is empty' );

@@ -5,4 +5,7 @@
   - understanding failure modes becomes difficult
   - chances are that each iteration of your loop isn't really a unique test
 
-example: 3.t
+example: slides/3.t
+
+* mock objects
+  - lib/WebUtils.pm ; slides/3a.t

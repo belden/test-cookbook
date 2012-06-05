@@ -1,2 +1,0 @@
-* stub objects - 3a.t
-* mock objects - 3b.t
