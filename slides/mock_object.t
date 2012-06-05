@@ -5,7 +5,6 @@ use warnings;
 
 use Test::More;
 use Test::Cookbook;
-use Test::Differences;
 
 use WebUtils qw(url_to_json);
 
