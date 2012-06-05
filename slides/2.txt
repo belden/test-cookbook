@@ -1,0 +1,9 @@
+"A small toolset for TDD"
+
+- deep_ok()
+- set_ok()
+- xml_ok() -- just parse XML into a data structure, then deep_ok() it
+- system_ok()
+- memoized_ok() -- losing memoisation of a function should be a test failure
+- stdout_of / stderr_of
+

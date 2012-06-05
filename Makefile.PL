@@ -9,6 +9,8 @@ WriteMakefile(
 	ABSTRACT            => 'Makefile.PL for my Test::Cookbook talk at YAPC::NA 2012',
 	LICENSE => 'perl',
 	PREREQ_PM => +{ map { ($_ => 0) } qw(
+		JSON::XS
+
 		Capture::Tiny
 		Devel::LexAlias
 		File::Temp

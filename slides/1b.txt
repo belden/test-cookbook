@@ -1,0 +1,9 @@
+"Good tests always inform"
+
+Your tests help you measure your code in all sorts of ways:
+* you can measure correctness, right: you can't deploy if your code change breaks the suite
+* you can build out your test harness to keep timings of test execution times and have meta tests
+  that make assertion about your test runs - like, "time to run this test file is within two
+  standard deviations of the norm"
+
+Above all, test failures must be meaningful. There's a bit of a lack here.

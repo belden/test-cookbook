@@ -17,12 +17,6 @@ my @expected  = (0, [2, 2, {goodnight => 'moon'}, 3, [5, 4]]);
 # unified_diff;
 # eq_or_diff( \@got, \@expected, 'eq_or_diff - unified_diff' );
 
-sub deep_ok ($$;$) {
-	require Test::Differences;
-	Test::Differences::unified_diff;
-	Test::Differences::eq_or_diff(@_);
-}
-
 deep_ok( \@got, \@expected );
 
 __END__

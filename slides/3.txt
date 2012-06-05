@@ -1,0 +1,8 @@
+"Some nice testing technology"
+
+* tests in a loop are easy to write... but hard to maintain
+  - maintaining testcounts takes heroics
+  - understanding failure modes becomes difficult
+  - chances are that each iteration of your loop isn't really a unique test
+
+example: 3.t
