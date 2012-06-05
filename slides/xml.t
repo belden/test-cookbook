@@ -29,11 +29,10 @@ XML
 my $got = $expected;
 is_xml( $got, $expected, 'built it good' );
 
-{
-	(my $got = $expected) =~ s{<vatNumber>123</vatNumber>}{<catNumber>456</catNumber>};
-	is_xml( $got, $expected, 'miaowed it good' );
-	xml_ok( $got, $expected, 'purr' );
-}
+# provoke a deliberate failure: vatNumber -> cat_Number
+($got = $expected) =~ s{<vatNumber>123</vatNumber>}{<cat_Number>456</cat_Number>};
+is_xml( $got, $expected, 'miaowed it good' );
+xml_ok( $got, $expected, 'purr' );
 
 my $html_expected = <<HTML;
 <html>
