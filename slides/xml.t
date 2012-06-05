@@ -32,7 +32,6 @@ is_xml( $got, $expected, 'built it good' );
 {
 	(my $got = $expected) =~ s{<vatNumber>123</vatNumber>}{<catNumber>456</catNumber>};
 	is_xml( $got, $expected, 'miaowed it good' );
-
 	xml_ok( $got, $expected, 'purr' );
 }
 
@@ -44,4 +43,5 @@ my $html_expected = <<HTML;
 HTML
 
 (my $html_got = $html_expected) =~ s{hello}{goodbye};
+is_xml( $html_got, $html_expected );
 xml_ok( $html_got, $html_expected );
