@@ -80,7 +80,6 @@ sub each_ok (&@) {
 	my $index = 0;
 	foreach (@_) {
 		my $raw = $_;
-
 		my @out = $code->();
 
 		if (@out == 1) {

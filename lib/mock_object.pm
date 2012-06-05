@@ -1,5 +1,16 @@
 package mock_object;
 
+use strict;
+use warnings;
+
+use overload '&{}' => sub {
+	my ($self) = @_;
+	return sub {
+		my (%args) = @_;
+		@{$self->{-canned_responses}}{keys %args} = values %args;
+	};
+};
+
 sub new {
 	my ($class, %args) = @_;
 	return bless {-canned_responses => \%args}, __PACKAGE__;

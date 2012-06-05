@@ -33,9 +33,8 @@
 4. weird testing technology
    - tied and overloaded objects
    - replacing things in CORE::GLOBAL::
-   - destroyed classes
+   - destroyed classes                     -- inline packages in test files get bloated and become a maintenance burden
 
 5. testing technology I'm not a fan of
    - Test::MockObject - no offense intended here; I just don't like the interface. It doesn't feel like writing Perl to me.
-     Usually I just implement my own thing using resubs and destroyed classes. Maybe I should stick that up on CPAN.
 
