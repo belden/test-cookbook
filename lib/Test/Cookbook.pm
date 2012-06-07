@@ -24,6 +24,7 @@ use IO::Capture::Stdout ();
 use mock_object;
 
 sub deep_ok ($$;$) {
+	local $Test::Builder::Level = $Test::Builder::Level + 1;
 	Test::Differences::unified_diff;
 	Test::Differences::eq_or_diff(@_);
 }
@@ -58,6 +59,7 @@ sub xml_ok ($$;$) {
 	return deep_ok( $convert_to_data->($got), $convert_to_data->($expected), $message );
 }
 
+# Capture::Tiny
 sub stdout_of(&) { return _captured('IO::Capture::Stdout', @_) }
 sub stderr_of(&) { return _captured('IO::Capture::Stderr', @_) }
 
